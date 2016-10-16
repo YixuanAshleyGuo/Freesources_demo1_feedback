@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     #third-party apps
     'bootstrap3',
     'folium',
+    'json',
     'feedback',
+    'Freesource',
 ]
 
 MIDDLEWARE_CLASSES = [
