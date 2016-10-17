@@ -15,12 +15,7 @@
     }).addTo(map);
     
 
-    function onMapClick(e) {
-        L.popup()
-            .setLatLng(e.latlng)
-            .setContent("You clicked the map at " + e.latlng.toString())
-            .openOn(map);
-    }
+    
     map.on('click', onMapClick);
 
 
@@ -42,35 +37,61 @@
             <td>{{ event.expiration}}</td>
             <td>{{ event.location}}</td>
             <td>{{ event.description}}</td>
-<script>
-//    add marker to the map
-        var marker = new L.marker(['{{event.latitude}}','{{event.longitude}}']);
-        var popup = "<table class=\"table\">";
-        popup += "<tr><th>Tag</th><td>";
-        popup += '{{event.tag_name}}';
-        popup += "</td></tr>";
-        popup += "<tr><th>Location</th><td>";
-        popup += '{{event.location}}';
-        popup += "</td></tr>";
-        popup += "<tr><th>Description</th><td>";
-        popup += '{{event.description}}';
-        popup += "</td></tr>";
-        popup += "<tr><th>Type</th><td>";
-        popup += '{{event.expire_type}}';
-        popup += "</td></tr>";
-        popup += "<tr><th>Start Time</th><td>";
-        popup += '{{event.start_time}}';
-        popup += "</td></tr>";
-        popup += "<tr><th>Expiration</th><td>";
-        popup += '{{event.expiration}}';
-        popup += "</td></tr>";
-//        popup += "<tr><button id=\"confirm\" onclick=\"feedback()\" type=\"button\" class=\"btn btn-primary\">Confirm</button></tr>";
-//        popup += "<tr><button id=\"rej_false\" onclick=\"feedback()\" type=\"button\" class=\"btn btn-primary\">Reject - False Event</button></tr>";
-//        popup += "<tr><button id=\"rej_exp\" onclick=\"feedback()\" type=\"button\" class=\"btn btn-primary\">Reject - Expired</button></tr>";
-        popup += "</table>";
-        marker.bindPopup(popup);
-        map.addLayer(marker);        
-</script>
+        <script>
+        //    add marker to the map
+                var marker = new L.marker(['{{event.latitude}}','{{event.longitude}}']);
+                var popup = "<h4 id=\"'{{event.event_id}}'\">Event Details</h4>";
+                popup += "<table class=\"table\">";
+                popup += "<tr><th>Tag</th><td>";
+                popup += '{{event.tag_name}}';
+                popup += "</td></tr>";
+                popup += "<tr><th>Location</th><td>";
+                popup += '{{event.location}}';
+                popup += "</td></tr>";
+                popup += "<tr><th>Description</th><td>";
+                popup += '{{event.description}}';
+                popup += "</td></tr>";
+                popup += "<tr><th>Type</th><td>";
+                popup += '{{event.expire_type}}';
+                popup += "</td></tr>";
+                popup += "<tr><th>Start Time</th><td>";
+                popup += '{{event.start_time}}';
+                popup += "</td></tr>";
+                popup += "<tr><th>Expiration</th><td>";
+                popup += '{{event.expiration}}';
+                popup += "</td></tr>";
+
+                if('{{event.feedback_type}}' == 'None'){
+                    //        feedback buttons
+                    var url = "{% url 'Freesource.views.feedback' 'confirm' event.event_id %}";
+                    popup += '<tr><td><a href="'+url+'">';
+                    popup += "<button onclick=\"feedback(this)\" class=\"btn btn-success btn-block\">Confirm</button></a></td><td></td></tr>";
+
+                    url = "{% url 'Freesource.views.feedback' 'rej_false' event.event_id %}";
+                    popup += '<tr><td><a href="'+url+'">';
+                    popup += "<button onclick=\"feedback(this)\" class=\"btn btn-danger btn-block\">Reject - False Event</button></a></td>";
+
+                    url = "{% url 'Freesource.views.feedback' 'rej_exp' event.event_id %}";
+                    popup += '<tr><td><a href="'+url+'">';
+                    popup += "<button onclick=\"feedback(this)\" class=\"btn btn-warning btn-block\">Reject - Expired</button></a></td></tr>";
+                }
+                else{
+                    popup += "<tr><th><strong>Feedback</strong></th><td><strong>";
+                    if('{{event.feedback_type}}' == 'confirm'){
+                        popup += "<div style=\"color:green\">Confirm</div>";
+                    }
+                    else if('{{event.feedback_type}}' == 'rej_false'){
+                        popup += "<div style=\"color:red\">Rejection - False Event</div>";
+                    }
+                    else{
+                        popup += "<div style=\"color:#FF5733\">Rejection - Expired</div>";
+                    }
+                    popup += "</strong></td></tr>"
+                }
+                popup += "</table>";
+                marker.bindPopup(popup);
+                map.addLayer(marker);        
+        </script>
         {% endfor %}
 
 

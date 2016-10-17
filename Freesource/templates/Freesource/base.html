@@ -22,6 +22,19 @@
         <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
 {% endblock base_head_css %}
 
+    {% block head_css %}
+    {% endblock head_css %}
+
+    {% block base_head_script %}
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <script src="{% bootstrap_jquery_url %}"></script>
+        {% bootstrap_javascript %}
+    {% endblock base_head_script %}
+
+    {% block head_script %}
+    {% endblock head_script %}
     
 </head>
 <body> 

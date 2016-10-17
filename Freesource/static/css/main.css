@@ -2,6 +2,9 @@ body{
     padding: 20px;
     background-color: aliceblue;
 }
+a:hover{
+    text-decoration: none;
+}
 #map {
 /*  position:absolute;*/
   padding: 20px;
